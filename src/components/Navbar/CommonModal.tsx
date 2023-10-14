@@ -1,5 +1,4 @@
 "use client";
-import { useGlobalContext } from "@/context";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
@@ -12,7 +11,6 @@ const CommonModal = ({
   setShow,
   showModalTitle,
 }: any) => {
-  const { showNavModal, setShowNavModal } = useGlobalContext();
 
   return (
     <Transition.Root show={show} as={Fragment}>

@@ -1,74 +1,53 @@
 "use client";
 import { Fragment } from "react";
-import { adminNavOptions, navOptions, styles } from "@/constants";
-import { useGlobalContext } from "@/context";
 import CommonModal from "./CommonModal";
-
+import { useGlobalContext } from "@/context";
+import NavItems from "./NavItems";
+import NavbarButton from "../UI/NavbarButton";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 const isAdminView = false;
-const isAuthUser = true;
-const user = {
-  role: "admin",
-};
-
-const NavItems = ({ isModalWiew = false }: {isModalWiew?: boolean}) => {
-  return (
-    <div
-      className={`items-center justify-between w-full md:flex md:w-auto ${isModalWiew ? "" : "hidden"}`}
-      id="nav-items"
-    >
-      <ul className={`flex flex-col p-4 md:p-0 mt-4 font-medium rounded-lg md:flex-row md:space-x-8 md:mt-0 bg-white ${isModalWiew ? "" : "border border-gray-100"}`}>
-        {isAdminView
-          ? adminNavOptions.map((item) => (
-              <li
-                key={item.id}
-                className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
-              >
-                {item.label}
-              </li>
-            ))
-          : navOptions.map((item) => (
-              <li
-                key={item.id}
-                className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
-              >
-                {item.label}
-              </li>
-            ))}
-      </ul>
-    </div>
-  );
-};
 
 const Navbar = () => {
   const { showNavModal, setShowNavModal } = useGlobalContext();
+  const { user, isAuthUser, setIsAuthUser, setUser } = useGlobalContext();
+  const router = useRouter()
+
+  const handleLogout = () => {
+    setIsAuthUser(false);
+    setUser(null);
+    Cookies.remove("token");
+    localStorage.clear();
+    router.push("/")
+  };
 
   return (
     <>
       <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div className="flex items-center cursor-pointer">
-            <span className="self-center text-2xl font-semibold whitespace-nowrap">
+            <span onClick={() => router.push("/")} className="self-center text-2xl font-semibold whitespace-nowrap">
               Shop wave
             </span>
           </div>
           <div className="flex md:order-2 gap-2">
             {!isAdminView && isAuthUser ? (
               <Fragment>
-                <button className={styles.button}>Account</button>
-                <button className={styles.button}>Cart</button>
+                <NavbarButton>Account</NavbarButton>
+                <NavbarButton>Cart</NavbarButton>
               </Fragment>
             ) : null}
             {user?.role === "admin" ? (
               isAdminView ? (
-                <button className={styles.button}>Client Wiew</button>
+                <NavbarButton>Client Wiew</NavbarButton>
               ) : (
-                <button className={styles.button}>Admin Wiew</button>
+                <NavbarButton>Admin Wiew</NavbarButton>
               )
             ) : null}
             {isAuthUser ? (
-              <button className={styles.button}>Logout</button>
+              <NavbarButton onClick={handleLogout}>Logout</NavbarButton>
             ) : (
-              <button className={styles.button}>Login</button>
+              <NavbarButton onClick={() => router.push("/login")}>Login</NavbarButton>
             )}
             <button
               data-collapse-toggle="navbar-sticky"
@@ -94,14 +73,14 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-          <NavItems />
+          <NavItems isAdminView={isAdminView} />
         </div>
       </nav>
-      <CommonModal 
+      <CommonModal
         showModalTitle={false}
         mainContent={<NavItems isModalWiew={true} />}
-        show={showNavModal} 
-        setShow={setShowNavModal} 
+        show={showNavModal}
+        setShow={setShowNavModal}
       />
     </>
   );

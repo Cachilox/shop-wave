@@ -25,3 +25,8 @@ export interface User {
   role: string;
   _id: string;
 }
+
+export interface Size {
+  id: string;
+  label: string;
+}

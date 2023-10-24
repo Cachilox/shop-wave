@@ -1,32 +1,44 @@
 "use client";
 import { Fragment } from "react";
-import CommonModal from "./CommonModal";
 import { useGlobalContext } from "@/context";
-import NavItems from "./NavItems";
-import NavbarButton from "../UI/NavbarButton";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-const isAdminView = false;
+import { usePathname, useRouter } from "next/navigation";
+import NavbarButton from "../UI/NavbarButton";
+import NavItems from "./NavItems";
+import CommonModal from "./CommonModal";
 
 const Navbar = () => {
-  const { showNavModal, setShowNavModal } = useGlobalContext();
-  const { user, isAuthUser, setIsAuthUser, setUser } = useGlobalContext();
-  const router = useRouter()
+  const {
+    user,
+    isAuthUser,
+    setIsAuthUser,
+    setUser,
+    showNavModal,
+    setShowNavModal,
+  } = useGlobalContext();
+
+  const router = useRouter();
+  const pathName = usePathname();
 
   const handleLogout = () => {
     setIsAuthUser(false);
     setUser(null);
     Cookies.remove("token");
     localStorage.clear();
-    router.push("/")
+    router.push("/");
   };
+
+  const isAdminView = pathName.includes("admin-view");
 
   return (
     <>
       <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div className="flex items-center cursor-pointer">
-            <span onClick={() => router.push("/")} className="self-center text-2xl font-semibold whitespace-nowrap">
+            <span
+              onClick={() => router.push("/")}
+              className="self-center text-2xl font-semibold whitespace-nowrap"
+            >
               Shop wave
             </span>
           </div>
@@ -39,15 +51,21 @@ const Navbar = () => {
             ) : null}
             {user?.role === "admin" ? (
               isAdminView ? (
-                <NavbarButton>Client Wiew</NavbarButton>
+                <NavbarButton onClick={() => router.push("/")}>
+                  Client View
+                </NavbarButton>
               ) : (
-                <NavbarButton>Admin Wiew</NavbarButton>
+                <NavbarButton onClick={() => router.push("/admin-view")}>
+                  Admin Wiew
+                </NavbarButton>
               )
             ) : null}
             {isAuthUser ? (
               <NavbarButton onClick={handleLogout}>Logout</NavbarButton>
             ) : (
-              <NavbarButton onClick={() => router.push("/login")}>Login</NavbarButton>
+              <NavbarButton onClick={() => router.push("/login")}>
+                Login
+              </NavbarButton>
             )}
             <button
               data-collapse-toggle="navbar-sticky"
@@ -73,12 +91,18 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-          <NavItems isAdminView={isAdminView} />
+          <NavItems isAdminView={isAdminView} router={router} />
         </div>
       </nav>
       <CommonModal
         showModalTitle={false}
-        mainContent={<NavItems isModalWiew={true} />}
+        mainContent={
+          <NavItems
+            isModalWiew={true}
+            isAdminView={isAdminView}
+            router={router}
+          />
+        }
         show={showNavModal}
         setShow={setShowNavModal}
       />

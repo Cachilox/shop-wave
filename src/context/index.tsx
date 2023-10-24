@@ -8,6 +8,7 @@ import {
   useEffect,
 } from "react";
 import Cookies from "js-cookie";
+import { User } from "@/interface/types";
 
 interface ComponentLevelLoader {
   loading: boolean;
@@ -19,7 +20,7 @@ interface GlobalContextInterface {
   setShowNavModal: Dispatch<SetStateAction<boolean>>;
   isAuthUser: boolean;
   setIsAuthUser: Dispatch<SetStateAction<boolean>>;
-  user: null;
+  user: User | null;
   setUser: Dispatch<SetStateAction<null>>;
   pageLevelLoader: boolean;
   setPageLevelLoader: Dispatch<SetStateAction<boolean>>;
@@ -36,7 +37,7 @@ export const GlobalContext = createContext<GlobalContextInterface>({
   setUser: () => {},
   pageLevelLoader: false,
   setPageLevelLoader: () => {},
-  componentLevelLoader: {loading: false, id: ""},
+  componentLevelLoader: { loading: false, id: "" },
   setComponentLevelLoader: () => {},
 });
 

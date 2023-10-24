@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FormData } from "@/interface/types";
 import { registrationFormControls } from "@/constants";
 import { registerUser } from "@/services/register";
-import { isFormValidate } from "@/utils";
+import { isFormValidate } from "@/utils/formValidate.utility";
 import InputComponent from "@/components/FormElements/InputComponent";
 import SelectComponent from "@/components/FormElements/SelectComponent";
 import { useGlobalContext } from "@/context";

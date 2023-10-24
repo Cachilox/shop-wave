@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { loginFormControls } from "@/constants";
 import { useRouter } from "next/navigation";
 import { FormData } from "@/interface/types";
-import { isFormValidate } from "@/utils";
+import { isFormValidate } from "@/utils/formValidate.utility";
 import { loginUser } from "@/services/login";
 import { useGlobalContext } from "@/context";
 import Cookies from "js-cookie";

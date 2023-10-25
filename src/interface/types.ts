@@ -19,6 +19,11 @@ export interface FormData {
   [key: string]: string;
 }
 
+export interface ComponentLevelLoader {
+  loading: boolean;
+  id: string;
+}
+
 export interface User {
   name: string;
   email: string;
@@ -26,7 +31,31 @@ export interface User {
   _id: string;
 }
 
+export interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  priceDrop: number;
+  sizes: Size[];
+  imageUrl: string;
+  onSale: string;
+}
+
 export interface Size {
   id: string;
   label: string;
+}
+
+export interface FormD {
+  name: string,
+  price: number,
+  description: string,
+  category: string,
+  sizes: Size[],
+  deliveryInfo: string,
+  onSale: string,
+  imageUrl: string,
+  priceDrop: number,
 }

@@ -3,9 +3,7 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-const AuthUser = async (req: NextResponse) => {
-  console.log(req.headers.get("Authorization"));
-  
+const AuthUser = async (req: NextResponse) => {  
   const token = req.headers.get("Authorization")?.split(" ")[1];
 
   if (!token) return false;

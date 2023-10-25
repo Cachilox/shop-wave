@@ -2,10 +2,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Notification, ProductButtons, ProductTile } from "..";
+import { Product } from "@/interface/types";
 
-export default function CommonListing({ data }: any) {
+export default function CommonListing({ data }: { data: Product[] }) {
   const router = useRouter();
-  
+
   useEffect(() => {
     router.refresh();
   }, []);
@@ -15,7 +16,7 @@ export default function CommonListing({ data }: any) {
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4 sm:gap-4 lg:mt-16">
           {data && data.length
-            ? data.map((item: any) => (
+            ? data.map((item) => (
                 <article
                   className="relative flex flex-col overflow-hidden border cursor-pointer"
                   key={item._id}
@@ -27,7 +28,7 @@ export default function CommonListing({ data }: any) {
             : null}
         </div>
       </div>
-      <Notification/>
+      <Notification />
     </section>
   );
 }

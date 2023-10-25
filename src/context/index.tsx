@@ -8,12 +8,7 @@ import {
   useEffect,
 } from "react";
 import Cookies from "js-cookie";
-import { User } from "@/interface/types";
-
-interface ComponentLevelLoader {
-  loading: boolean;
-  id: string;
-}
+import { ComponentLevelLoader, User } from "@/interface/types";
 
 interface GlobalContextInterface {
   showNavModal: boolean;
@@ -26,6 +21,8 @@ interface GlobalContextInterface {
   setPageLevelLoader: Dispatch<SetStateAction<boolean>>;
   componentLevelLoader: ComponentLevelLoader;
   setComponentLevelLoader: Dispatch<SetStateAction<ComponentLevelLoader>>;
+  currentUpdatedProduct: null;
+  setCurrentUpdatedProduct: Dispatch<SetStateAction<null>>;
 }
 
 export const GlobalContext = createContext<GlobalContextInterface>({
@@ -39,6 +36,8 @@ export const GlobalContext = createContext<GlobalContextInterface>({
   setPageLevelLoader: () => {},
   componentLevelLoader: { loading: false, id: "" },
   setComponentLevelLoader: () => {},
+  currentUpdatedProduct: null,
+  setCurrentUpdatedProduct: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -56,14 +55,15 @@ export default function GlobalState({
 }: {
   children: React.ReactNode;
 }) {
-  const [showNavModal, setShowNavModal] = useState(false);
+  const [user, setUser] = useState(null);
   const [isAuthUser, setIsAuthUser] = useState(false);
+  const [showNavModal, setShowNavModal] = useState(false);
   const [pageLevelLoader, setPageLevelLoader] = useState(false);
   const [componentLevelLoader, setComponentLevelLoader] = useState({
     loading: false,
     id: "",
   });
-  const [user, setUser] = useState(null);
+  const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("user");
@@ -89,6 +89,8 @@ export default function GlobalState({
         setPageLevelLoader,
         componentLevelLoader,
         setComponentLevelLoader,
+        currentUpdatedProduct,
+        setCurrentUpdatedProduct,
       }}
     >
       {children}

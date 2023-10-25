@@ -1,11 +1,12 @@
 "use client";
+import { Product } from "@/interface/types";
 import { useRouter } from "next/navigation";
 
-export default function ProductTile({ item }: any) {
+export default function ProductTile({ item }: { item: Product }) {
   const router = useRouter();
-  
+
   return (
-    <div onClick={()=> router.push(`/product/${item._id}`)}>
+    <div onClick={() => router.push(`/product/${item._id}`)}>
       <div className="overflow-hideen aspect-w-1 aspect-h-1 h-52">
         <img
           src={item.imageUrl}
@@ -23,21 +24,21 @@ export default function ProductTile({ item }: any) {
       <div className="my-4 mx-auto flex w-10/12 flex-col items-start justify-between">
         <div className="mb-2 flex">
           <p
-            className={`mr-3 text-sm font-semibold ${item.onSale === "yes" ? "text-red-700" : ""} ${
-              item.onSale === "yes" ? "line-through" : ""
-            }`}
+            className={`mr-3 text-sm font-semibold ${
+              item.onSale === "yes" ? "text-gray-400" : ""
+            } ${item.onSale === "yes" ? "line-through" : ""}`}
           >{`$ ${item.price}`}</p>
           {item.onSale === "yes" ? (
-            <p className="mr-3 text-sm font-semibold text-green-700">{`$ ${(
+            <p className="mr-3 text-sm font-semibold">{`$ ${(
               item.price -
               item.price * (item.priceDrop / 100)
             ).toFixed(2)}`}</p>
           ) : null}
           {item.onSale === "yes" ? (
-            <p className="mr-3 text-sm font-semibold">{`(${item.priceDrop}%) off`}</p>
+            <p className="mr-3 text-sm font-semibold text-green-600">{`${item.priceDrop}% OFF`}</p>
           ) : null}
         </div>
-        <h3 className="md-2 text-gray-400 text-sm">{item.name}</h3>
+        <h3 className="md-2 text-gray-400 font-semibold text-sm">{item.name}</h3>
       </div>
     </div>
   );

@@ -1,58 +1,13 @@
 "use client";
-import React, { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import {InputComponent, Loader,Notification, SelectComponent, TileComponent} from "@/components";
 import { adminAddProductformControls, AvailableSizes } from "@/constants";
-import {
-  InputComponent,
-  Loader,
-  Notification,
-  SelectComponent,
-  TileComponent,
-} from "@/components";
-import { firebaseConfig, firebaseStorageURL } from "@/firebase";
-import { initializeApp } from "firebase/app";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import { Size } from "@/interface/types";
-import { addNewProduct } from "@/services/product";
+import { FormD, Size } from "@/interface/types";
+import { addNewProduct, updateAProduct } from "@/services/product";
 import { GlobalContext } from "@/context";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app, firebaseStorageURL);
-
-const createUniqueFileName = (getFile: File) => {
-  const timeStamp = Date.now();
-  const randomStringValue = Math.random().toString(36).substring(2, 12);
-
-  return `${getFile?.name}-${timeStamp}-${randomStringValue}`;
-};
-
-const helperForUploadingImageToFirebase = async (file: File) => {
-  const getFileName = createUniqueFileName(file);
-  const storageRefence = ref(storage, `ecommerce/${getFileName}`);
-  const uploadImage = uploadBytesResumable(storageRefence, file);
-
-  return new Promise<string>((resolve, reject) => {
-    uploadImage.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log(error);
-        reject(error);
-      },
-      () => {
-        getDownloadURL(uploadImage.snapshot.ref)
-          .then((downloadUrl) => resolve(downloadUrl))
-          .catch((error) => reject(error));
-      }
-    );
-  });
-};
+import { helperForUploadingImageToFirebase } from "@/firebase";
 
 const initialFormData = {
   name: "",
@@ -67,11 +22,19 @@ const initialFormData = {
 };
 
 const AdminAddNewProduct = () => {
-  const [formData, setFormData] = useState(initialFormData);
-  const { componentLevelLoader, setComponentLevelLoader } =
-    useContext(GlobalContext);
+  const [formData, setFormData] = useState<FormD>(initialFormData);
+  const {
+    componentLevelLoader,
+    setComponentLevelLoader,
+    currentUpdatedProduct,
+    setCurrentUpdatedProduct,
+  } = useContext(GlobalContext);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (currentUpdatedProduct !== null) setFormData(currentUpdatedProduct);
+  }, [currentUpdatedProduct]);
 
   const handleImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.files);
@@ -110,7 +73,10 @@ const AdminAddNewProduct = () => {
 
   const handleAddProduct = async () => {
     setComponentLevelLoader({ loading: true, id: "" });
-    const res = await addNewProduct(formData);
+    const res =
+      currentUpdatedProduct !== null
+        ? await updateAProduct(formData)
+        : await addNewProduct(formData);
     console.log(res);
 
     if (res.success) {
@@ -120,6 +86,7 @@ const AdminAddNewProduct = () => {
       });
 
       setFormData(initialFormData);
+      setCurrentUpdatedProduct(null)
       setTimeout(() => {
         router.push("/admin-view/all-products");
       }, 1300);
@@ -187,10 +154,16 @@ const AdminAddNewProduct = () => {
           >
             {componentLevelLoader && componentLevelLoader.loading ? (
               <Loader
-                text={"Adding Product"}
+                text={
+                  currentUpdatedProduct !== null
+                    ? "Updating Product"
+                    : "Adding Product"
+                }
                 color={"#ffffff"}
                 loading={componentLevelLoader && componentLevelLoader.loading}
               />
+            ) : currentUpdatedProduct !== null ? (
+              "Update Product"
             ) : (
               "Add Product"
             )}

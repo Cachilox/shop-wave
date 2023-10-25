@@ -5,36 +5,39 @@ import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import { Loader } from "..";
+import { deleteAProduct } from "@/services/product";
+import { Product } from "@/interface/types";
 
-export default function ProductButton({ item }: any) {
+export default function ProductButton({ item }: {item: Product}) {
   const pathName = usePathname();
   const {
     setComponentLevelLoader,
     componentLevelLoader,
+    setCurrentUpdatedProduct,
     user,
   } = useContext(GlobalContext);
   const router = useRouter();
 
   const isAdminView = pathName.includes("admin-view");
 
-  // async function handleDeleteProduct(item: any) {
-  //   setComponentLevelLoader({ loading: true, id: item._id });
+  async function handleDeleteProduct(item: Product) {
+    setComponentLevelLoader({ loading: true, id: item._id });
 
-  //   const res = await deleteAProduct(item._id);
+    const res = await deleteAProduct(item._id);
 
-  //   if (res.success) {
-  //     setComponentLevelLoader({ loading: false, id: "" });
-  //     toast.success(res.message, {
-  //       position: toast.POSITION.TOP_RIGHT,
-  //     });
-  //     router.refresh();
-  //   } else {
-  //     toast.error(res.message, {
-  //       position: toast.POSITION.TOP_RIGHT,
-  //     });
-  //     setComponentLevelLoader({ loading: false, id: "" });
-  //   }
-  // }
+    if (res.success) {
+      setComponentLevelLoader({ loading: false, id: "" });
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      router.refresh();
+    } else {
+      toast.error(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
+    }
+  }
 
   // async function handleAddToCart(getItem) {
   //   setComponentLevelLoader({ loading: true, id: getItem._id });
@@ -62,7 +65,7 @@ export default function ProductButton({ item }: any) {
     <>
       <button
         onClick={() => {
-          // setCurrentUpdatedProduct(item);
+          setCurrentUpdatedProduct(item);
           router.push("/admin-view/add-product");
         }}
         className="mt-1.5 flex w-full justify-center bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
@@ -70,7 +73,7 @@ export default function ProductButton({ item }: any) {
         Update
       </button>
       <button
-        // onClick={() => handleDeleteProduct(item)}
+        onClick={() => handleDeleteProduct(item)}
         className="mt-1.5 flex w-full justify-center bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
       >
         {componentLevelLoader &&

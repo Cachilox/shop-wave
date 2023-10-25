@@ -1,7 +1,7 @@
-import { FormData } from "@/interface/types";
+import { FormD, FormData } from "@/interface/types";
 import Cookies from "js-cookie";
 
-export const addNewProduct = async (formData: FormData) => {
+export const addNewProduct = async (formData: FormD) => {
   try {
     const response = await fetch("/api/admin/add-product", {
       method: "POST",
@@ -32,5 +32,78 @@ export const getAllAdminProducts = async () => {
     return data;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const updateAProduct = async (formData: FormD) => {
+  try {
+    const res = await fetch("/api/admin/update-product", {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+      cache: "no-store",
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const deleteAProduct = async (id: string) => {
+  try {
+    const res = await fetch(`/api/admin/delete-product?id=${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
+
+    const data = await res.json();
+
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const productByCategory = async (id: string) => {
+  try {
+    const res = await fetch(
+      `http://localhost:3000/api/admin/product-by-category?id=${id}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+
+    const data = await res.json();
+
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const productById = async (id: string) => {
+  try {
+    const res = await fetch(
+      `http://localhost:3000/api/admin/product-by-id?id=${id}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+
+    const data = await res.json();
+
+    return data;
+  } catch (e) {
+    console.log(e);
   }
 };

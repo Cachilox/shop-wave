@@ -1,6 +1,12 @@
+import { initializeApp } from "firebase/app";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
-// Your web app's Firebase configuration
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: `${process.env.NEXT_PUBLIC_API_KEY}`,
   authDomain: "ecommerce-shop-wave.firebaseapp.com",
   projectId: "ecommerce-shop-wave",
@@ -9,4 +15,36 @@ export const firebaseConfig = {
   appId: "1:975470675981:web:03e52ef361147bad8e6d44",
 };
 
-export const firebaseStorageURL = "gs://ecommerce-shop-wave.appspot.com";
+const firebaseStorageURL = "gs://ecommerce-shop-wave.appspot.com";
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app, firebaseStorageURL);
+
+const createUniqueFileName = (getFile: File) => {
+  const timeStamp = Date.now();
+  const randomStringValue = Math.random().toString(36).substring(2, 12);
+
+  return `${getFile?.name}-${timeStamp}-${randomStringValue}`;
+};
+
+export const helperForUploadingImageToFirebase = async (file: File) => {
+  const getFileName = createUniqueFileName(file);
+  const storageRefence = ref(storage, `ecommerce/${getFileName}`);
+  const uploadImage = uploadBytesResumable(storageRefence, file);
+
+  return new Promise<string>((resolve, reject) => {
+    uploadImage.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadImage.snapshot.ref)
+          .then((downloadUrl) => resolve(downloadUrl))
+          .catch((error) => reject(error));
+      }
+    );
+  });
+};

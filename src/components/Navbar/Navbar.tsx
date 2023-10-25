@@ -1,5 +1,5 @@
 "use client";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { useGlobalContext } from "@/context";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,10 +15,17 @@ const Navbar = () => {
     setUser,
     showNavModal,
     setShowNavModal,
+    currentUpdatedProduct,
+    setCurrentUpdatedProduct
   } = useGlobalContext();
 
   const router = useRouter();
   const pathName = usePathname();
+
+  useEffect(() => {
+    if(pathName !== "/admin-view/add-product" && currentUpdatedProduct !== null) setCurrentUpdatedProduct(null)
+  }, [pathName])
+  
 
   const handleLogout = () => {
     setIsAuthUser(false);

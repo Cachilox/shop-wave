@@ -1,8 +1,14 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import {InputComponent, Loader,Notification, SelectComponent, TileComponent} from "@/components";
+import {
+  InputComponent,
+  Loader,
+  Notification,
+  SelectComponent,
+  TileComponent,
+} from "@/components";
 import { adminAddProductformControls, AvailableSizes } from "@/constants";
-import { FormD, Size } from "@/interface/types";
+import { Product, Size } from "@/interface/types";
 import { addNewProduct, updateAProduct } from "@/services/product";
 import { GlobalContext } from "@/context";
 import { useRouter } from "next/navigation";
@@ -22,7 +28,7 @@ const initialFormData = {
 };
 
 const AdminAddNewProduct = () => {
-  const [formData, setFormData] = useState<FormD>(initialFormData);
+  const [formData, setFormData] = useState<Product>(initialFormData);
   const {
     componentLevelLoader,
     setComponentLevelLoader,
@@ -37,8 +43,6 @@ const AdminAddNewProduct = () => {
   }, [currentUpdatedProduct]);
 
   const handleImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
-
     if (event.target.files) {
       const extractImageUrl = await helperForUploadingImageToFirebase(
         event.target.files[0]
@@ -86,7 +90,7 @@ const AdminAddNewProduct = () => {
       });
 
       setFormData(initialFormData);
-      setCurrentUpdatedProduct(null)
+      setCurrentUpdatedProduct(null);
       setTimeout(() => {
         router.push("/admin-view/all-products");
       }, 1300);

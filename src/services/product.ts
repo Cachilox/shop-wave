@@ -1,7 +1,7 @@
-import { FormD, FormData } from "@/interface/types";
+import { Product } from "@/interface/types";
 import Cookies from "js-cookie";
 
-export const addNewProduct = async (formData: FormD) => {
+export const addNewProduct = async (formData: Product) => {
   try {
     const response = await fetch("/api/admin/add-product", {
       method: "POST",
@@ -35,7 +35,7 @@ export const getAllAdminProducts = async () => {
   }
 };
 
-export const updateAProduct = async (formData: FormD) => {
+export const updateAProduct = async (formData: Product) => {
   try {
     const res = await fetch("/api/admin/update-product", {
       method: "PUT",
@@ -48,7 +48,7 @@ export const updateAProduct = async (formData: FormD) => {
     });
 
     const data = await res.json();
-    
+
     return data;
   } catch (e) {
     console.log(e);

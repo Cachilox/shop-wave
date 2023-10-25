@@ -32,13 +32,14 @@ export interface User {
 }
 
 export interface Product {
-  _id: string;
+  _id?: string;
   name: string;
   category: string;
   description: string;
   price: number;
   priceDrop: number;
   sizes: Size[];
+  deliveryInfo: string;
   imageUrl: string;
   onSale: string;
 }
@@ -46,16 +47,4 @@ export interface Product {
 export interface Size {
   id: string;
   label: string;
-}
-
-export interface FormD {
-  name: string,
-  price: number,
-  description: string,
-  category: string,
-  sizes: Size[],
-  deliveryInfo: string,
-  onSale: string,
-  imageUrl: string,
-  priceDrop: number,
 }

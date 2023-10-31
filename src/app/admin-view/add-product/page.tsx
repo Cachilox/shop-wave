@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   InputComponent,
   Loader,
@@ -10,7 +10,7 @@ import {
 import { adminAddProductformControls, AvailableSizes } from "@/constants";
 import { Product, Size } from "@/interface/types";
 import { addNewProduct, updateAProduct } from "@/services/product";
-import { GlobalContext } from "@/context";
+import { useGlobalContext } from "@/context";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { helperForUploadingImageToFirebase } from "@/firebase";
@@ -34,7 +34,7 @@ const AdminAddNewProduct = () => {
     setComponentLevelLoader,
     currentUpdatedProduct,
     setCurrentUpdatedProduct,
-  } = useContext(GlobalContext);
+  } = useGlobalContext();
 
   const router = useRouter();
 

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Notification, ProductButtons, ProductTile } from "..";
+import { Notification, ProductButtons, ProductTile } from "@/components";
 import { Product } from "@/interface/types";
 
 export default function CommonListing({ data }: { data: Product[] }) {

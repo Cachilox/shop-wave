@@ -1,34 +1,32 @@
 "use client";
-import { GlobalContext } from "@/context";
-import { useContext } from "react";
+import { useGlobalContext } from "@/context";
 import { toast } from "react-toastify";
-// import { addToCart } from "@/services/cart";
-import { Loader, Notification } from ".";
+import { Loader, Notification } from "@/components";
 import { Product } from "@/interface/types";
+import { addToCart } from "@/services/cart";
 
 export default function CommonDetails({ item }: { item: Product }) {
-  const { setComponentLevelLoader, componentLevelLoader } =
-    useContext(GlobalContext);
+  const { setComponentLevelLoader, componentLevelLoader, user, setShowCartModal } = useGlobalContext();
 
-  // async function handleAddToCart(getItem) {
-  //   setComponentLevelLoader({ loading: true, id: "" });
+  const handleAddToCart = async (getItem: any) => {
+    setComponentLevelLoader({ loading: true, id: "" });
 
-  //   const res = await addToCart({ productID: getItem._id, userID: user._id });
+    const res = await addToCart({ productID: getItem._id, userID: user?._id });
 
-  //   if (res.success) {
-  //     toast.success(res.message, {
-  //       position: toast.POSITION.TOP_RIGHT,
-  //     });
-  //     setComponentLevelLoader({ loading: false, id: "" });
-  //     setShowCartModal(true);
-  //   } else {
-  //     toast.error(res.message, {
-  //       position: toast.POSITION.TOP_RIGHT,
-  //     });
-  //     setComponentLevelLoader({ loading: false, id: "" });
-  //     setShowCartModal(true);
-  //   }
-  // }
+    if (res.success) {
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
+      setShowCartModal(true);
+    } else {
+      toast.error(res.message, {
+        position: toast.POSITION.BOTTOM_LEFT,
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
+      setShowCartModal(true);
+    }
+  }
 
   return (
     <section className="mx-auto mt-16 max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -93,7 +91,7 @@ export default function CommonDetails({ item }: { item: Product }) {
               </div>
               <button
                 type="button"
-                // onClick={() => handleAddToCart(item)}
+                onClick={() => handleAddToCart(item)}
                 className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium tracking-wide uppercase text-white"
               >
                 {componentLevelLoader && componentLevelLoader.loading ? (
@@ -120,9 +118,7 @@ export default function CommonDetails({ item }: { item: Product }) {
             <div className="lg:col-span-3">
               <div className="border-b border-gray-400">
                 <nav className="flex gap-4">
-                  <span
-                    className="border-b-2 cursor-pointer border-gray-900 py-4 text-sm font-medium text-gray-900"
-                  >
+                  <span className="border-b-2 cursor-pointer border-gray-900 py-4 text-sm font-medium text-gray-900">
                     Description
                   </span>
                 </nav>

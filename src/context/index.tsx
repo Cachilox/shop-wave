@@ -8,7 +8,7 @@ import {
   useEffect,
 } from "react";
 import Cookies from "js-cookie";
-import { ComponentLevelLoader, User } from "@/interface/types";
+import { ComponentLevelLoader, Product, User } from "@/interface/types";
 
 interface GlobalContextInterface {
   showNavModal: boolean;
@@ -23,6 +23,10 @@ interface GlobalContextInterface {
   setComponentLevelLoader: Dispatch<SetStateAction<ComponentLevelLoader>>;
   currentUpdatedProduct: null;
   setCurrentUpdatedProduct: Dispatch<SetStateAction<null>>;
+  showCartModal: boolean;
+  setShowCartModal: Dispatch<SetStateAction<boolean>>;
+  cartItems: Product[];
+  setCartItems: Dispatch<SetStateAction<Product[]>>;
 }
 
 export const GlobalContext = createContext<GlobalContextInterface>({
@@ -32,12 +36,16 @@ export const GlobalContext = createContext<GlobalContextInterface>({
   setIsAuthUser: () => {},
   user: null,
   setUser: () => {},
-  pageLevelLoader: false,
+  pageLevelLoader: true,
   setPageLevelLoader: () => {},
   componentLevelLoader: { loading: false, id: "" },
   setComponentLevelLoader: () => {},
   currentUpdatedProduct: null,
   setCurrentUpdatedProduct: () => {},
+  showCartModal: false,
+  setShowCartModal: () => {},
+  cartItems: [],
+  setCartItems: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -58,12 +66,14 @@ export default function GlobalState({
   const [user, setUser] = useState(null);
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [showNavModal, setShowNavModal] = useState(false);
-  const [pageLevelLoader, setPageLevelLoader] = useState(false);
-  const [componentLevelLoader, setComponentLevelLoader] = useState({
+  const [pageLevelLoader, setPageLevelLoader] = useState(true);
+  const [componentLevelLoader, setComponentLevelLoader] = useState<ComponentLevelLoader>({
     loading: false,
     id: "",
   });
   const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [cartItems, setCartItems] = useState<Product[]>([]);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("user");
@@ -91,6 +101,10 @@ export default function GlobalState({
         setComponentLevelLoader,
         currentUpdatedProduct,
         setCurrentUpdatedProduct,
+        showCartModal,
+        setShowCartModal,
+        cartItems,
+        setCartItems,
       }}
     >
       {children}

@@ -4,13 +4,15 @@ import { FormData } from "@/interface/types";
 import { registrationFormControls } from "@/constants";
 import { registerUser } from "@/services/register";
 import { isFormValidate } from "@/utils/formValidate.utility";
-import InputComponent from "@/components/FormElements/InputComponent";
-import SelectComponent from "@/components/FormElements/SelectComponent";
 import { useGlobalContext } from "@/context";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/UI/Loader";
-import Notification from "@/components/Notification";
+import {
+  Notification,
+  Loader,
+  SelectComponent,
+  InputComponent,
+} from "@/components";
 
 const initialFormData = {
   name: "",

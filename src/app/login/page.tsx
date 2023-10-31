@@ -7,9 +7,7 @@ import { isFormValidate } from "@/utils/formValidate.utility";
 import { loginUser } from "@/services/login";
 import { useGlobalContext } from "@/context";
 import Cookies from "js-cookie";
-import InputComponent from "@/components/FormElements/InputComponent";
-import Loader from "@/components/UI/Loader";
-import Notification from "@/components/Notification";
+import { InputComponent, Notification, Loader } from "@/components";
 import { toast } from "react-toastify";
 
 const initialFormData = {

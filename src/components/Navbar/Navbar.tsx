@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import NavbarButton from "../UI/NavbarButton";
 import NavItems from "./NavItems";
 import CommonModal from "./CommonModal";
+import { CartModal } from "..";
 
 const Navbar = () => {
   const {
@@ -16,7 +17,9 @@ const Navbar = () => {
     showNavModal,
     setShowNavModal,
     currentUpdatedProduct,
-    setCurrentUpdatedProduct
+    setCurrentUpdatedProduct,
+    showCartModal,
+    setShowCartModal
   } = useGlobalContext();
 
   const router = useRouter();
@@ -53,7 +56,7 @@ const Navbar = () => {
             {!isAdminView && isAuthUser ? (
               <Fragment>
                 <NavbarButton>Account</NavbarButton>
-                <NavbarButton>Cart</NavbarButton>
+                <NavbarButton onClick={() => setShowCartModal(true)}>Cart</NavbarButton>
               </Fragment>
             ) : null}
             {user?.role === "admin" ? (
@@ -113,6 +116,7 @@ const Navbar = () => {
         show={showNavModal}
         setShow={setShowNavModal}
       />
+      {showCartModal && <CartModal />}
     </>
   );
 };

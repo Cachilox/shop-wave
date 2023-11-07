@@ -1,12 +1,16 @@
 import connectToDB from "@/database";
 import AuthUser from "@/middleware/AuthUser";
-import Cart from "@/models/cart";
+import Address from "@/models/address";
 import Joi from "joi";
 import { NextResponse, NextRequest } from "next/server";
 
-const AddToCart = Joi.object({
+const AddNewAddress = Joi.object({
+  fullName: Joi.string().required(),
+  address: Joi.string().required(),
+  city: Joi.string().required(),
+  country: Joi.string().required(),
+  postalCode: Joi.string().required(),
   userID: Joi.string().required(),
-  productID: Joi.string().required(),
 });
 
 export const dynamic = "force-dynamic";
@@ -14,13 +18,22 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   try {
     await connectToDB();
+
     const isAuthUser = await AuthUser(req);
 
     if (isAuthUser) {
       const data = await req.json();
-      const {productID , userID} = data;
 
-      const { error } = AddToCart.validate({ userID, productID });
+      const { fullName, address, city, country, postalCode, userID } = data;
+
+      const { error } = AddNewAddress.validate({
+        fullName,
+        address,
+        city,
+        country,
+        postalCode,
+        userID,
+      });
 
       if (error) {
         return NextResponse.json({
@@ -29,30 +42,17 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      const isCurrentCartItemAlreadyExists = await Cart.find({
-        productID: productID,
-        userID: userID,
-      });
+      const newlyAddedAddress = await Address.create(data);
 
-      if (isCurrentCartItemAlreadyExists?.length > 0) {
-        return NextResponse.json({
-          success: false,
-          message:
-            "Product is already added in cart! Please add different product",
-        });
-      }
-
-      const saveProductToCart = await Cart.create(data);
-
-      if (saveProductToCart) {
+      if (newlyAddedAddress) {
         return NextResponse.json({
           success: true,
-          message: "Product is added to cart !",
+          message: "Address added successfully",
         });
       } else {
         return NextResponse.json({
           success: false,
-          message: "failed to add the product to cart ! Please try again.",
+          message: "failed to add an address ! Please try again later",
         });
       }
     } else {

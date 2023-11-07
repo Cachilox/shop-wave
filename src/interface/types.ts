@@ -25,10 +25,10 @@ export interface ComponentLevelLoader {
 }
 
 export interface User {
+  _id: string;
   name: string;
   email: string;
   role: string;
-  _id: string;
 }
 
 export interface Product {
@@ -47,4 +47,13 @@ export interface Product {
 export interface Size {
   id: string;
   label: string;
+}
+
+export interface Address {
+  _id?: string;
+  fullName: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  address: string;
 }

@@ -67,13 +67,22 @@ export default function GlobalState({
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [showNavModal, setShowNavModal] = useState(false);
   const [pageLevelLoader, setPageLevelLoader] = useState(true);
-  const [componentLevelLoader, setComponentLevelLoader] = useState<ComponentLevelLoader>({
-    loading: false,
-    id: "",
-  });
+  const [componentLevelLoader, setComponentLevelLoader] =
+    useState<ComponentLevelLoader>({
+      loading: false,
+      id: "",
+    });
   const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
   const [showCartModal, setShowCartModal] = useState(false);
   const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [addresses, setAddresses] = useState([]);
+  const [addressFormData, setAddressFormData] = useState({
+    fullName: "",
+    city: "",
+    country: "",
+    postalCode: "",
+    address: "",
+  });
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("user");
@@ -105,6 +114,10 @@ export default function GlobalState({
         setShowCartModal,
         cartItems,
         setCartItems,
+        addresses,
+        setAddresses,
+        addressFormData,
+        setAddressFormData,
       }}
     >
       {children}

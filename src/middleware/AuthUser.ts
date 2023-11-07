@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-const AuthUser = async (req: NextResponse) => {  
+const AuthUser = async (req: NextRequest) => {  
   const token = req.headers.get("Authorization")?.split(" ")[1];
 
   if (!token) return false;

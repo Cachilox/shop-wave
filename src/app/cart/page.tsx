@@ -16,7 +16,6 @@ const Cart = () => {
     componentLevelLoader,
     setComponentLevelLoader,
   } = useGlobalContext();
-  console.log(pageLevelLoader);
 
   const extractAllCartItems = async () => {
     setPageLevelLoader(true);

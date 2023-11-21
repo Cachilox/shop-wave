@@ -22,7 +22,7 @@ const initialFormData = {
 };
 
 const RegisterPage = () => {
-  const { isAuthUser, pageLevelLoader, setPageLevelLoader } =
+  const { isAuthUser, componentLevelLoader, setComponentLevelLoader } =
     useGlobalContext();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isRegistered, setIsRegistered] = useState(false);
@@ -30,7 +30,7 @@ const RegisterPage = () => {
   const router = useRouter();
 
   const handleRegister = async () => {
-    setPageLevelLoader(true);
+    setComponentLevelLoader({ loading: true, id: "" });
     const data = await registerUser(formData);
 
     if (data.success) {
@@ -38,14 +38,14 @@ const RegisterPage = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
       setIsRegistered(true);
-      setPageLevelLoader(false);
+      setComponentLevelLoader({ loading: false, id: "" });
       setFormData(initialFormData);
     } else {
       toast.error(data.message, {
         position: toast.POSITION.TOP_RIGHT,
       });
-      setPageLevelLoader(false);
       setFormData(initialFormData);
+      setComponentLevelLoader({ loading: false, id: "" });
     }
   };
 
@@ -110,11 +110,13 @@ const RegisterPage = () => {
                     className="disabled:opacity-50 inline-flex w-full items-center justify-center bg-black mt-[1.7rem] px-6 py-4 text-lg 
                 text-white transition-all duration-200 ease-in-out focus:shadow font-medium uppercase tracking-wide"
                   >
-                    {pageLevelLoader ? (
+                    {componentLevelLoader && componentLevelLoader.loading ? (
                       <Loader
                         text={"Registering"}
                         color={"#ffffff"}
-                        loading={pageLevelLoader}
+                        loading={
+                          componentLevelLoader && componentLevelLoader.loading
+                        }
                       />
                     ) : (
                       "Register"

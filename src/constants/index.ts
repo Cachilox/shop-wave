@@ -225,3 +225,37 @@ export const addNewAddressFormControls = [
     componentType: "input",
   },
 ];
+
+export const initialAddressFormData = {
+  fullName: "",
+  city: "",
+  country: "",
+  postalCode: "",
+  address: "",
+};
+
+export const initialCheckoutFormData = {
+  shippingAddress: {},
+  paymentMethod: "",
+  totalPrice: 0,
+  isPaid: false,
+  paidAt: new Date(),
+  isProcessing: true,
+};
+
+export const publishableKey =
+  "pk_test_51OC64tBVQsLpIE71CukDkH5MegSnZOMnKWzFguKOkAoJNvVFivXQxL4p3I5e5u1Dm7Efq9uwR6yPB0mBhn2bcAqB00WVkgSsIx";
+
+export const protectedRoutes = [
+  "/cart",
+  "/checkout",
+  "/account",
+  "/orders",
+  "/admin-view",
+];
+
+export const protectedAdminRoutes = [
+  "/admin-view",
+  "/admin-view/add-product",
+  "/admin-view/all-products",
+];

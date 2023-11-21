@@ -122,8 +122,8 @@ const CartModal = () => {
         <Fragment>
           <button
             onClick={() => {
-              setShowCartModal(false);
               router.push("/cart");
+              setShowCartModal(false);
             }}
             className="mt-1.5 w-full inline-block bg-black text-white px-5 py-3 text-xs font-medium uppercase tracking-wide"
           >
@@ -132,6 +132,10 @@ const CartModal = () => {
           <button
             disabled={cartItems && cartItems.length === 0}
             type="button"
+            onClick={() => {
+              router.push("/checkout")
+              setShowCartModal(false)
+            }}
             className="mt-1.5 w-full inline-block bg-black text-white px-5 py-3 text-xs font-medium uppercase tracking-wide disabled:opacity-50"
           >
             Checkout

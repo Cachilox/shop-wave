@@ -32,16 +32,18 @@ export interface User {
 }
 
 export interface Product {
+  productID: {
+    name: string;
+    category: string;
+    description: string;
+    price: number;
+    priceDrop: number;
+    sizes: Size[];
+    deliveryInfo: string;
+    imageUrl: string;
+    onSale: string;
+  }
   _id?: string;
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  priceDrop: number;
-  sizes: Size[];
-  deliveryInfo: string;
-  imageUrl: string;
-  onSale: string;
 }
 
 export interface Size {

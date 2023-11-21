@@ -8,7 +8,19 @@ import {
   useEffect,
 } from "react";
 import Cookies from "js-cookie";
-import { ComponentLevelLoader, Product, User } from "@/interface/types";
+import {
+  ComponentLevelLoader,
+  Product,
+  User,
+  Address,
+} from "@/interface/types";
+import {
+  initialAddressFormData,
+  initialCheckoutFormData,
+  protectedAdminRoutes,
+  protectedRoutes,
+} from "@/constants";
+import { usePathname, useRouter } from "next/navigation";
 
 interface GlobalContextInterface {
   showNavModal: boolean;
@@ -27,6 +39,8 @@ interface GlobalContextInterface {
   setShowCartModal: Dispatch<SetStateAction<boolean>>;
   cartItems: Product[];
   setCartItems: Dispatch<SetStateAction<Product[]>>;
+  addresses: Address[];
+  setAddresses: Dispatch<SetStateAction<Address[]>>;
 }
 
 export const GlobalContext = createContext<GlobalContextInterface>({
@@ -46,6 +60,8 @@ export const GlobalContext = createContext<GlobalContextInterface>({
   setShowCartModal: () => {},
   cartItems: [],
   setCartItems: () => {},
+  addresses: [],
+  setAddresses: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -67,33 +83,61 @@ export default function GlobalState({
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [showNavModal, setShowNavModal] = useState(false);
   const [pageLevelLoader, setPageLevelLoader] = useState(true);
+  const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
+  const [showCartModal, setShowCartModal] = useState(false);
+  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [addresses, setAddresses] = useState([]);
+  const [addressFormData, setAddressFormData] = useState(
+    initialAddressFormData
+  );
+  const [checkoutFormData, setCheckoutFormData] = useState(
+    initialCheckoutFormData
+  );
   const [componentLevelLoader, setComponentLevelLoader] =
     useState<ComponentLevelLoader>({
       loading: false,
       id: "",
     });
-  const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
-  const [showCartModal, setShowCartModal] = useState(false);
-  const [cartItems, setCartItems] = useState<Product[]>([]);
-  const [addresses, setAddresses] = useState([]);
-  const [addressFormData, setAddressFormData] = useState({
-    fullName: "",
-    city: "",
-    country: "",
-    postalCode: "",
-    address: "",
-  });
+
+  const router = useRouter();
+  const pathName = usePathname();
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("user");
     if (Cookies.get("token") !== undefined && storedUserData !== null) {
-      const userData = JSON.parse(storedUserData) || {};
       setIsAuthUser(true);
+      const userData = JSON.parse(storedUserData) || {};
+      const getCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
       setUser(userData);
+      setCartItems(getCartItems);
     } else {
       setIsAuthUser(false);
+      setUser({});
     }
-  }, []);
+  }, [Cookies]);
+
+  useEffect(() => {
+    if (
+      pathName !== "/register" &&
+      !pathName.includes("product") &&
+      pathName !== "/" &&
+      user &&
+      Object.keys(user).length === 0 &&
+      protectedRoutes.includes(pathName)
+    )
+      router.push("/login");
+  }, [user, pathName]);
+  
+  useEffect(() => {
+    if (
+      user !== null &&
+      user &&
+      Object.keys(user).length > 0 &&
+      user?.role !== "admin" &&
+      protectedAdminRoutes.indexOf(pathName) > -1
+    )
+      router.push("/unauthorized-page");
+  }, [user, pathName]);
 
   return (
     <GlobalContext.Provider
@@ -118,6 +162,8 @@ export default function GlobalState({
         setAddresses,
         addressFormData,
         setAddressFormData,
+        checkoutFormData,
+        setCheckoutFormData,
       }}
     >
       {children}

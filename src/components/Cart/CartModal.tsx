@@ -25,8 +25,6 @@ const CartModal = () => {
       setCartItems(res.data);
       localStorage.setItem("cartItems", JSON.stringify(res.data));
     }
-
-    console.log(res);
   };
 
   useEffect(() => {

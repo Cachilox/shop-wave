@@ -12,6 +12,7 @@ import {
 import { toast } from "react-toastify";
 import { Address } from "@/interface/types";
 import { PulseLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
 
 const Account = () => {
   const {
@@ -28,6 +29,8 @@ const Account = () => {
 
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [currentEditedAddressId, setCurrentEditedAddressId] = useState(null);
+
+  const router = useRouter()
 
   const extractAllAddresses = async () => {
     setPageLevelLoader(true);
@@ -133,7 +136,7 @@ const Account = () => {
               <p>{user?.email}</p>
               <p>{user?.role}</p>
             </div>
-            <button className="mt-5 inline-block bg-black text-white px-5 py-3 text-xs font-medium uppercase tracking-wide">
+            <button onClick={() => router.push("/orders")} className="mt-5 inline-block bg-black text-white px-5 py-3 text-xs font-medium uppercase tracking-wide">
               View Your Orders
             </button>
             <div className="mt-6">

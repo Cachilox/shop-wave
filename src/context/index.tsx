@@ -99,6 +99,10 @@ export default function GlobalState({
       id: "",
     });
 
+  const [allOrdersForUser, setAllOrdersForUser] = useState([]);
+  const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState([]);
+  const [orderDetails, setOrderDetails] = useState(null);
+
   const router = useRouter();
   const pathName = usePathname();
 
@@ -127,7 +131,7 @@ export default function GlobalState({
     )
       router.push("/login");
   }, [user, pathName]);
-  
+
   useEffect(() => {
     if (
       user !== null &&
@@ -164,6 +168,12 @@ export default function GlobalState({
         setAddressFormData,
         checkoutFormData,
         setCheckoutFormData,
+        allOrdersForUser,
+        setAllOrdersForUser,
+        allOrdersForAllUsers,
+        setAllOrdersForAllUsers,
+        orderDetails,
+        setOrderDetails,
       }}
     >
       {children}
